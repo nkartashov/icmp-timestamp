@@ -149,11 +149,11 @@ private:
       orig = dataVectorToTimestamp(originate);
       recv = dataVectorToTimestamp(receive);
       trans = dataVectorToTimestamp(transmit);
-      uint32_t receivedNowTime = trans + (recv - orig);
-      posix_time::ptime now = posix_time::microsec_clock::universal_time();
+      uint32_t travelTime = ((now() - trans) + (recv - orig)) / 2;
+      uint32_t receivedNowTime = trans + travelTime;
+      posix_time::ptime myNow = posix_time::microsec_clock::universal_time();
       std::cout
-        << "Time between request and response: " << (now - mTimeSent).total_milliseconds() << " ms" << std::endl << "New time: ";
-      printMillisecondsAsTime(receivedNowTime);
+        << "Time between request and response: " << (myNow - mTimeSent).total_milliseconds() << " ms" << std::endl << "Delta: " << (receivedNowTime - now()) << " ms";
       throw std::exception();
     } else {
       StartReceive();
